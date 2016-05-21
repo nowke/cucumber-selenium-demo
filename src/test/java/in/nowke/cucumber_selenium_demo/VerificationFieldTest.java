@@ -15,7 +15,7 @@ import org.openqa.selenium.WebElement;
  */
 public class VerificationFieldTest {
 
-    private WebDriver driver;
+    private final WebDriver driver;
 
     public VerificationFieldTest() {
         driver = SeleniumTestRunner.getWebDriver();
@@ -45,6 +45,66 @@ public class VerificationFieldTest {
         Assert.assertEquals(
                 "Your form was successfully submitted. Thank you for contacting us.",
                 successStr
+        );
+        driver.close();
+    }
+
+    @And("^I fill single digit number \"([^\"]*)\" in verification field$")
+    public void i_fill_non_two_digit_number_in_verification_field(String single_digit) throws Throwable {
+        i_fill_two_digit_number_in_verification_field(single_digit);
+    }
+
+    @Then("^I get at least 2 character required error message$")
+    public void i_get_at_least_two_character_required_error_message() throws Throwable {
+        VerifyLabelStr("Please enter at least 2 characters.");
+        driver.close();
+    }
+
+    @Then("^I get field required error message$")
+    public void i_get_field_required_error_message() throws Throwable {
+        VerifyLabelStr("This field is required.");
+        driver.close();
+    }
+
+    @And("^I fill multiple digit number \"([^\"]*)\" in verification field$")
+    public void i_fill_multiple_digit_number_in_verification_field(String multiple) throws Throwable {
+        i_fill_two_digit_number_in_verification_field(multiple);
+    }
+
+    @Then("^I get no more than two characters error message$")
+    public void i_get_no_more_than_two_characters_error_message() throws Throwable {
+        VerifyLabelStr("Please enter no more than 2 characters.");
+        driver.close();
+    }
+
+    @And("^I fill non-digit \"([^\"]*)\" in verification field$")
+    public void i_fill_non_digit_in_verification_field(String character) throws Throwable {
+        i_fill_two_digit_number_in_verification_field(character);
+    }
+
+    @Then("^I get digits only error message$")
+    public void i_get_digits_only_error_message() throws Throwable {
+        VerifyLabelStr("Please enter only digits.");
+        driver.close();
+    }
+
+    /* Helper methods */
+
+    /**
+     * Finds Verification field error label element,
+     * asserts label text against @param expectedLabelStr
+     * @param expectedLabelStr Expected Label String
+     */
+    private void VerifyLabelStr(String expectedLabelStr) {
+        WebElement verificationErrorLabel = driver.findElement(By.cssSelector("label[for='vfb-3'][class='vfb-error']"));
+        String verificationError = verificationErrorLabel.getText();
+        Assert.assertEquals(
+                verificationErrorLabel.isDisplayed(),
+                true
+        );
+        Assert.assertEquals(
+                expectedLabelStr,
+                verificationError
         );
     }
 }
