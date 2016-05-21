@@ -14,15 +14,11 @@ import org.openqa.selenium.WebElement;
  * Created by nav on 21/5/16.
  */
 public class VerificationFieldTest {
-
-    private final WebDriver driver;
-
-    public VerificationFieldTest() {
-        driver = SeleniumTestRunner.getWebDriver();
-    }
+    private WebDriver driver;
 
     @Given("^Navigate to PracticeForm$")
     public void navigate() {
+        driver = SeleniumTestRunner.getWebDriver();
         driver.navigate().to(SeleniumTestRunner.TEST_URL);
         Assert.assertEquals("Selenium Framework | Practiceform", driver.getTitle());
         Assert.assertEquals("http://www.seleniumframework.com/Practiceform/", driver.getCurrentUrl());
